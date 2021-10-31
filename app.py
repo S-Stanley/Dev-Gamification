@@ -5,7 +5,7 @@ import os, datetime
 
 app = Flask(__name__)
 
-app.config['MONGO_URI'] = 'mongodb+srv://admin:{}@cluster0.tey73.mongodb.net/dev?retryWrites=true&w=majority'.format(os.environ['db_password'])
+app.config['MONGO_URI'] = os.environ['db_link']
 mongo = PyMongo(app)
 
 def add_stats(username: str, count: int):
