@@ -2,59 +2,14 @@ from flask import Flask, redirect, request, jsonify
 from utils import gitlab
 from flask_pymongo import PyMongo
 import os, datetime
+from services.project import create_project, find_project
+from services.merges import create_merge, find_merge
+from services.data import add_stats
+from services.users import find_user_by_email, create_user
 
 app = Flask(__name__)
 
 app.config['MONGO_URI'] = os.environ['db_link']
-mongo = PyMongo(app)
-
-def add_stats(username: str, count: int):
-	mongo.db.data.insert_one({
-		'username': username,
-		'total': count,
-	})
-
-def find_merge(merge_id: str):
-	print(merge_id)
-	to_find = mongo.db.merges.find_one({
-		'id': merge_id,
-	})
-	print(to_find)
-	return to_find
-
-def find_project(project_id: str):
-	to_find = mongo.db.projects.find_one({
-		'id': project_id,
-	})
-	return to_find
-
-def find_user_by_email(email: str):
-	to_find = mongo.db.users.find_one({
-		'email': email
-	})
-	return to_find
-
-def create_user(usr, auth):
-	if find_user_by_email(usr['email']): return
-	mongo.db.users.insert_one({
-		'name': usr['name'],
-		'username': usr['username'],
-		'avatar_url': usr['avatar_url'],
-		'web_url': usr['web_url'],
-		'email': usr['email'],
-		'refresh_token': auth['refresh_token'],
-		'access_token': auth['access_token'],
-		'created_at': str(datetime.datetime.now())
-	})
-
-def create_merge(merge):
-	if find_merge(merge['id']): return
-	mongo.db.merges.insert_one(merge)
-
-def create_project(project):
-	if find_project(project['id']): return
-	mongo.db.projects.insert_one(project)
-
 
 @app.route('/')
 def hello_word():
