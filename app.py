@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 app.config['MONGO_URI'] = os.environ['db_link']
 
-@app.route('/app')
+@app.route('/redirect')
 def hello_word():
 	code = request.args.get('code')
 	info_token = gitlab.get_token(code)
