@@ -40,7 +40,7 @@ def hello_word():
 		add_stats(player['username'], player['merges'])
 	create_user(user, info_token)
 	add_new_login(user['email'])
-	return render_template('hello.html', ladder=ladder)
+	return render_template('ladder.html', ladder=ladder)
 	# return jsonify(ladder)
 
 @app.route('/')
