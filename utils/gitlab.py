@@ -42,7 +42,6 @@ def get_all_merge_request_by_project_id(access_token):
 		page = 0
 		while items_get == 100:
 			page += 1
-			print(project['id'], access_token, page)
 			url = 'https://gitlab.com/api/v4/projects/{}/merge_requests?access_token={}&per_page=100&page={}'.format(project['id'], access_token, page)
 			req = requests.get(url)
 			items_get = len(req.json())
@@ -59,7 +58,7 @@ def get_user_info(access_token):
 	return (req.json())
 
 def get_all_project_by_user(user_id, access_token):
-	url = 'https://gitlab.com/api/v4/users/{}/projects?access_token={}'.format(user_id, access_token)
+	url = 'https://gitlab.com/api/v4/users/{}/projects?access_token={}&owned=true'.format(user_id, access_token)
 	req = requests.get(url)
 	with open('projects.json', 'w') as f:
 		f.write(json.dumps(req.json()))
