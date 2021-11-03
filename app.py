@@ -22,7 +22,8 @@ def hello_word():
 		- info_token.refresh_token
 	'''
 	user = gitlab.get_user_info(info_token['access_token'])
-	all_projects = gitlab.get_all_project_by_user(info_token['access_token'])
+	print(user)
+	all_projects = gitlab.get_all_project_by_user(user['id'], info_token['access_token'])
 	for project in all_projects:
 		create_project(project)
 	all_merges = gitlab.get_all_merge_request_by_project_id(info_token['access_token'])
