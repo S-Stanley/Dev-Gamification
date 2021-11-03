@@ -1,4 +1,4 @@
-from flask import Flask, redirect, request, jsonify
+from flask import Flask, redirect, request, jsonify, render_template
 from utils import gitlab
 from flask_pymongo import PyMongo
 import os, datetime
@@ -40,7 +40,8 @@ def hello_word():
 		add_stats(player['username'], player['merges'])
 	create_user(user, info_token)
 	add_new_login(user['email'])
-	return jsonify(ladder)
+	return render_template('hello.html', ladder=ladder)
+	# return jsonify(ladder)
 
 @app.route('/')
 def get_auth_link():
