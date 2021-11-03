@@ -10,5 +10,6 @@ def find_project(project_id: str):
 	return to_find
 
 def create_project(project):
+	print("***", project)
 	if find_project(project['id']): return
 	mongo.projects.insert_one(project)
