@@ -17,9 +17,7 @@ def find_author_or_create(arr, item):
 def sort_by_merges_number(e):
 	return len(e['merges'])
 
-def count_merges():
-	with open('merges.json', 'r') as f:
-		data = json.loads(f.read())
+def count_merges(data):
 	output = []
 	for merge in tqdm(data):
 		if 'state' in merge and merge['state'] == 'merged':
@@ -33,9 +31,7 @@ def count_merges():
 		})
 	return to_return
 
-def get_all_merge_request_by_project_id(access_token):
-	with open('projects.json', 'r') as f:
-		projects = json.loads(f.read())
+def get_all_merge_request_by_project_id(access_token, projects):
 	output = []
 	for project in projects:
 		items_get = 100
@@ -57,7 +53,7 @@ def get_user_info(access_token):
 	req = requests.get(url)
 	return (req.json())
 
-def get_all_project_by_user(user_id, access_token):
+def get_all_project_by_user(access_token):
 	url = 'https://gitlab.com/api/v4/projects?access_token={}&owned=true'.format(access_token)
 	req = requests.get(url)
 	with open('projects.json', 'w') as f:
