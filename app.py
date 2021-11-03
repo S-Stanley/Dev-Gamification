@@ -29,7 +29,7 @@ def hello_word():
 		print(all_projects[0])
 	# for project in all_projects:
 	# 	create_project(project)
-	all_merges = gitlab.get_all_merge_request_by_project_id(all_projects, info_token['access_token'])
+	all_merges = gitlab.get_all_merge_request_by_project_id(info_token['access_token'], all_projects)
 	print(len(all_merges))
 	if len(all_merges) > 0:
 		print(all_merges[0])
