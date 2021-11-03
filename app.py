@@ -27,19 +27,19 @@ def hello_word():
 	print(len(all_projects))
 	if len(all_projects) > 0:
 		print(all_projects[0])
-	# for project in all_projects:
-	# 	create_project(project)
+	for project in all_projects:
+		create_project(project)
 	all_merges = gitlab.get_all_merge_request_by_project_id(info_token['access_token'], all_projects)
 	print(len(all_merges))
 	if len(all_merges) > 0:
 		print(all_merges[0])
-	# for merge in all_merges:
-	# 	create_merge(merge)
+	for merge in all_merges:
+		create_merge(merge)
 	ladder = gitlab.count_merges(all_merges)
 	for player in ladder:
 		add_stats(player['username'], player['merges'])
-	# create_user(user, info_token)
-	# add_new_login(user['email'])
+	create_user(user, info_token)
+	add_new_login(user['email'])
 	return jsonify(ladder)
 
 @app.route('/')
