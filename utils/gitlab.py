@@ -54,7 +54,7 @@ def get_user_info(access_token):
 	return (req.json())
 
 def get_all_project_by_user(access_token):
-	url = 'https://gitlab.com/api/v4/projects?access_token={}&owned=true'.format(access_token)
+	url = 'https://gitlab.com/api/v4/projects?membership=true&access_token={}'.format(access_token)
 	req = requests.get(url)
 	with open('projects.json', 'w') as f:
 		f.write(json.dumps(req.json()))
