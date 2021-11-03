@@ -22,9 +22,10 @@ def get_grad(nb_merge):
 		all_grades = json.loads(f.read())
 	for grade in all_grades:
 		if int(grade['number']) < nb_merge:
+			previous = grade['name']
 			continue
 		else:
-			return grade['name']
+			return previous
 
 def count_merges(data):
 	output = []
