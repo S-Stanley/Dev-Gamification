@@ -1,0 +1,34 @@
+[{
+	"name": "Soldat",
+	"number": "0"
+},{
+	"name": "Caporal",
+	"number": "10"
+},{
+	"name": "Sergent",
+	"number": "25"
+},{
+	"name": "Adjudant",
+	"number": "50"
+},{
+	"name": "Major",
+	"number": "100"
+},{
+	"name": "Lieutenant",
+	"number": "250"
+},{
+	"name": "Capitaine",
+	"number": "500"
+}
+,{
+	"name": "Commendant",
+	"number": "2500"
+}
+,{
+	"name": "Colonel",
+	"number": "2500"
+}
+,{
+	"name": "General",
+	"number": "5000"
+}]

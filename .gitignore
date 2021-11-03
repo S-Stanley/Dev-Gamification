@@ -1,3 +1,4 @@
 .env
-*.json
+merges.json
+project.json
 *.pyc

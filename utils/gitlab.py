@@ -17,6 +17,13 @@ def find_author_or_create(arr, item):
 def sort_by_merges_number(e):
 	return len(e['merges'])
 
+def get_grad(nb_merge):
+	with open('../grad.json', 'r') as f:
+		all_grades = f.readline()
+	for grade in all_grades:
+		if grade.number < nb_merge:
+			return grade.name
+
 def count_merges(data):
 	output = []
 	for merge in tqdm(data):
@@ -27,7 +34,8 @@ def count_merges(data):
 	for i in output:
 		to_return.append({
 			'username': i['username'],
-			'merges': len(i['merges'])
+			'merges': len(i['merges']),
+			'grade': get_grad(len(i['merges']))
 		})
 	return to_return
 
