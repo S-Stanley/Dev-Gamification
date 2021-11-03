@@ -42,6 +42,7 @@ def get_all_merge_request_by_project_id(access_token):
 		page = 0
 		while items_get == 100:
 			page += 1
+			print(project['id'], access_token, page)
 			url = 'https://gitlab.com/api/v4/projects/{}/merge_requests?access_token={}&per_page=100&page={}'.format(project['id'], access_token, page)
 			req = requests.get(url)
 			items_get = len(req.json())
