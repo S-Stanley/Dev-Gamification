@@ -22,17 +22,10 @@ def hello_word():
 		- info_token.refresh_token
 	'''
 	user = gitlab.get_user_info(info_token['access_token'])
-	print(user)
 	all_projects = gitlab.get_all_project_by_user(info_token['access_token'])
-	print(len(all_projects))
-	if len(all_projects) > 0:
-		print(all_projects[0])
 	for project in all_projects:
 		create_project(project)
 	all_merges = gitlab.get_all_merge_request_by_project_id(info_token['access_token'], all_projects)
-	print(len(all_merges))
-	if len(all_merges) > 0:
-		print(all_merges[0])
 	for merge in all_merges:
 		create_merge(merge)
 	ladder = gitlab.count_merges(all_merges)
@@ -41,7 +34,6 @@ def hello_word():
 	create_user(user, info_token)
 	add_new_login(user['email'])
 	return render_template('ladder.html', ladder=ladder)
-	# return jsonify(ladder)
 
 @app.route('/')
 def get_auth_link():
