@@ -21,7 +21,7 @@ def hello_word():
 		- info_token.access_token
 		- info_token.refresh_token
 	'''
-	user = gitlab.get_user_info
+	user = gitlab.get_user_info()
 	all_projects = gitlab.get_all_project_by_user(info_token['access_token'])
 	for project in all_projects:
 		create_project(project)
