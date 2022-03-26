@@ -21,7 +21,7 @@ def get_grad(nb_merge):
 	with open('./grad.json', 'r') as f:
 		all_grades = json.loads(f.read())
 	for grade in all_grades:
-		if int(grade['number']) < nb_merge:
+		if int(grade['number']) <= nb_merge:
 			previous = grade['name']
 			continue
 		else:
