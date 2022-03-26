@@ -8,55 +8,34 @@ The goal is to count the number of merges request, have a grade/rank and get som
 
 You can have some data like this in gitlab or github, but they are mainly based on commit, not on merge/pull request.
 
+You can access the production version at purpev.com
+
 ### Scope
 
 For the moment purpev is only working on gitlab.
 
 ### Structure of the repository
 
-```services/``` crud for the database
+```scripts/``` every bash repo related scripts
 
-```templates/``` html pages
-
-```utils/``` OAuth2.0 connection to 3rd party like gitlab and get datas.
+```services/``` all the differents services (backend, frontend, etc..)
 
 ### Usage
 
-If you don't have virtualenv installed
 ```shell
-pip3 install virtualenv
+bash scripts/start_webapp.sh to run the front end server
 ```
 
-Create the virtual env
 ```shell
-virtualenv purpev_virtualenv
+bash scripts/start_api.sh to run the front end server
 ```
 
-Activate the virtual env
-```shell
-source purpev_virtualenv/bin/activate
-```
-
-Install the requirements
-```shell
-pip3 install -r requirements.txt
-```
-
-Launch the server
-```shell
-bash script/start_purpev.sh
-```
-
-### Usefull commands
-
-To desactivate the virutal environment run into your terminal:
-
-```shell
-deactivate
-```
+You will need somes environments variables, ask the owner.
 
 ### Stack
 
 - Flask
-- Python
+- Python3
 - MongoDB
+- React
+- Typescript
