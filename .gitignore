@@ -2,3 +2,4 @@
 merges.json
 project.json
 *.pyc
+purpev_virtualenv/

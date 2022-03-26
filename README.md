@@ -20,6 +20,41 @@ For the moment purpev is only working on gitlab.
 
 ```utils/``` OAuth2.0 connection to 3rd party like gitlab and get datas.
 
+### Usage
+
+If you don't have virtualenv installed
+```shell
+pip3 install virtualenv
+```
+
+Create the virtual env
+```shell
+virtualenv purpev_virtualenv
+```
+
+Activate the virtual env
+```shell
+source purpev_virtualenv/bin/activate
+```
+
+Install the requirements
+```shell
+pip3 install -r requirements.txt
+```
+
+Launch the server
+```shell
+bash script/start_purpev.sh
+```
+
+### Usefull commands
+
+To desactivate the virutal environment run into your terminal:
+
+```shell
+deactivate
+```
+
 ### Stack
 
 - Flask
