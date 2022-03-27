@@ -77,17 +77,17 @@
 {
 	"name": "Colonel",
 	"level": 15,
-	"number": "2000"
+	"number": "1500"
 },
 {
 	"name": "General de Brigade",
 	"level": 16,
-	"number": "3000"
+	"number": "2000"
 },
 {
 	"name": "General de Division",
 	"level": 17,
-	"number": "4000"
+	"number": "3000"
 },
 {
 	"name": "General de Corps d'Armées",
