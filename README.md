@@ -8,7 +8,7 @@ The goal is to count the number of merges request, have a grade/rank and get som
 
 You can have some data like this in gitlab or github, but they are mainly based on commit, not on merge/pull request.
 
-You can access the production version at purpev.com
+You can access the production version at [purpev.com](purpev.com)
 
 ### Scope
 
@@ -23,11 +23,11 @@ For the moment purpev is only working on gitlab.
 ### Usage
 
 ```shell
-bash scripts/start_webapp.sh to run the front end server
+bash scripts/start_webapp.sh # to run the front end server
 ```
 
 ```shell
-bash scripts/start_api.sh to run the front end server
+bash scripts/start_api.sh to # run the back end server
 ```
 
 You will need somes environments variables, ask the owner.
