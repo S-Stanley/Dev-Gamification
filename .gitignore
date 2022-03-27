@@ -1,5 +1,5 @@
 .env
 merges.json
-project.json
+projects.json
 *.pyc
 purpev_virtualenv/

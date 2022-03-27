@@ -1,34 +1,107 @@
-[{
-	"name": "Soldat",
+[
+{
+	"name": "Apprentis",
+	"level": 0,
 	"number": "0"
-},{
+},
+{
+	"name": "Soldat",
+	"level": 1,
+	"number": "5"
+},
+{
 	"name": "Caporal",
+	"level": 2,
 	"number": "10"
-},{
+},
+{
+	"name": "Caporal-chef",
+	"level": 3,
+	"number": "15"
+},
+{
 	"name": "Sergent",
+	"level": 4,
+	"number": "20"
+},
+{
+	"name": "Sergent-Chef",
+	"level": 5,
 	"number": "25"
-},{
+},
+{
 	"name": "Adjudant",
+	"level": 6,
 	"number": "50"
-},{
+},
+{
+	"name": "Adjudant-Chef",
+	"level": 7,
+	"number": "75"
+},
+{
 	"name": "Major",
+	"level": 8,
 	"number": "100"
-},{
+},
+{
+	"name": "Aspirant",
+	"level": 9,
+	"number": "150"
+},
+{
+	"name": "Sous-Lieutenant",
+	"level": 10,
+	"number": "200"
+},
+{
 	"name": "Lieutenant",
+	"level": 11,
 	"number": "250"
-},{
+},
+{
 	"name": "Capitaine",
+	"level": 12,
 	"number": "500"
-}
-,{
-	"name": "Commendant",
+},
+{
+	"name": "Commandant",
+	"level": 13,
+	"number": "750"
+},
+{
+	"name": "Lieutenant-Colonel",
+	"level": 14,
 	"number": "1000"
-}
-,{
+},
+{
 	"name": "Colonel",
-	"number": "2500"
-}
-,{
-	"name": "General",
+	"level": 15,
+	"number": "2000"
+},
+{
+	"name": "General de Brigade",
+	"level": 16,
+	"number": "3000"
+},
+{
+	"name": "General de Division",
+	"level": 17,
+	"number": "4000"
+},
+{
+	"name": "General de Corps d'Armées",
+	"level": 18,
 	"number": "5000"
-}]
+},
+{
+	"name": "General d'Armées",
+	"level": 19,
+	"number": "7500"
+},
+{
+	"name": "Ministre des armées",
+	"level": 20,
+	"number": "10000"
+}
+]
