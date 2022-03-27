@@ -18,7 +18,7 @@ def sort_by_merges_number(e):
 	return len(e['merges'])
 
 def get_grad(nb_merge):
-	with open('./grad.json', 'r') as f:
+	with open('services/api/grad.json', 'r') as f:
 		all_grades = json.loads(f.read())
 	for grade in all_grades:
 		if int(grade['number']) <= nb_merge:
@@ -28,7 +28,7 @@ def get_grad(nb_merge):
 			return previous
 
 def get_level(nb_merge: int):
-	with open('./grad.json', 'r') as f:
+	with open('services/api/grad.json', 'r') as f:
 		all_grades = json.loads(f.read())
 	for grade in all_grades:
 		if int(grade['number']) <= nb_merge:
