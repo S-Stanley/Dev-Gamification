@@ -8,7 +8,7 @@ The goal is to count the number of merges request, have a grade/rank and get som
 
 You can have some data like this in gitlab or github, but they are mainly based on commit, not on merge/pull request.
 
-You can access the production version at [purpev.com](purpev.com)
+You can access the production version at [purpev.com](https://purpev.com)
 
 ### Scope
 
