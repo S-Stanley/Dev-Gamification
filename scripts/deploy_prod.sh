@@ -3,6 +3,7 @@
 location=$(pwd)
 
 cd services/web || echo "error while trying to change directory to services/web"
+npm i
 npm run build
 pm2 restart build
 
