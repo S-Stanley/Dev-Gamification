@@ -27,6 +27,16 @@ def get_grad(nb_merge):
 		else:
 			return previous
 
+def get_level(nb_merge: int):
+	with open('./grad.json', 'r') as f:
+		all_grades = json.loads(f.read())
+	for grade in all_grades:
+		if int(grade['number']) <= nb_merge:
+			previous = grade['level']
+			continue
+		else:
+			return previous
+
 def count_merges(data):
 	output = []
 	for merge in tqdm(data):
@@ -38,7 +48,8 @@ def count_merges(data):
 		to_return.append({
 			'username': i['username'],
 			'merges': len(i['merges']),
-			'grade': get_grad(len(i['merges']))
+			'grade': get_grad(len(i['merges'])),
+			'level': get_level(len(i['merges'])),
 		})
 	return to_return
 

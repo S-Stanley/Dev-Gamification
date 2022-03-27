@@ -36,6 +36,7 @@ function HomePage(){
                             <tr>
                                 <th>Username</th>
                                 <th>Merges</th>
+                                <th>Level</th>
                                 <th>Grade</th>
                             </tr>
                         </thead>
@@ -45,6 +46,7 @@ function HomePage(){
                                     <tr key={index}>
                                         <td>{x.username}</td>
                                         <td>{x.merges}</td>
+                                        <td>{x.level}</td>
                                         <td>{x.grade}</td>
                                     </tr>
                                 );
