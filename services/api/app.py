@@ -1,4 +1,3 @@
-from crypt import methods
 from http.client import HTTPResponse
 import json
 from flask import Flask, redirect, request, jsonify, render_template
@@ -43,3 +42,6 @@ def fetch_info():
 	except Exception as e:
 		print(e)
 		return ("error while fetching data", 400)
+
+if __name__ == "__main__":
+	app.run(host="0.0.0.0", port="1240")
