@@ -38,6 +38,7 @@ def fetch_info():
 			access_token: access_token,
 			refresh_token: refresh_token,
 		})
+		add_new_login(user['email'])
 		return jsonify(ladder)
 	except Exception as e:
 		print(e)
