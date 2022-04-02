@@ -7,7 +7,8 @@ import ILadder from '../interfaces/ILadder';
 
 async function get_token(code: string): Promise<IGitlabToken | null>{
     try {
-        const req = await axios.post("https://gitlab.com/oauth/token", {
+        const uriGitlab = localStorage.getItem('uriGitlab') ?? 'https://gitlab.com';
+        const req = await axios.post(`${uriGitlab}/oauth/token`, {
             client_id: process.env.REACT_APP_CLIENT_ID,
             code: code,
             grant_type: 'authorization_code',
@@ -24,9 +25,11 @@ async function get_token(code: string): Promise<IGitlabToken | null>{
 
 async function fetch_data_from_gitlab(access_token: string, refresh_token :string): Promise<ILadder[] | null>{
     try {
+        const uri_gitlab = localStorage.getItem('uriGitlab') ?? 'https://gitlab.com';
         const formData = new FormData();
         formData.append('access_token', access_token);
         formData.append('refresh_token', refresh_token);
+        formData.append('uri_gitlab', uri_gitlab);
         const req = await axios.post(`${Config.api}/fetch`, formData);
         return (req.data);
     }

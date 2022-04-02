@@ -53,14 +53,14 @@ def count_merges(data):
 		})
 	return to_return
 
-def get_all_merge_request_by_project_id(access_token, projects):
+def get_all_merge_request_by_project_id(access_token, projects, uri_gitlab):
 	output = []
 	for project in projects:
 		items_get = 100
 		page = 0
 		while items_get == 100:
 			page += 1
-			url = 'https://gitlab.com/api/v4/projects/{}/merge_requests?access_token={}&per_page=100&page={}'.format(project['id'], access_token, page)
+			url = '{}/api/v4/projects/{}/merge_requests?access_token={}&per_page=100&page={}'.format(uri_gitlab, project['id'], access_token, page)
 			req = requests.get(url)
 			items_get = len(req.json())
 			for i in req.json():
@@ -70,13 +70,13 @@ def get_all_merge_request_by_project_id(access_token, projects):
 	return output
 
 
-def get_user_info(access_token):
-	url = 'https://gitlab.com/api/v4/user?access_token={}'.format(access_token)
+def get_user_info(access_token, uri_gitlab):
+	url = '{}/api/v4/user?access_token={}'.format(uri_gitlab, access_token)
 	req = requests.get(url)
 	return (req.json())
 
-def get_all_project_by_user(access_token):
-	url = 'https://gitlab.com/api/v4/projects?membership=true&access_token={}'.format(access_token)
+def get_all_project_by_user(access_token, uri_gitlab):
+	url = '{}/api/v4/projects?membership=true&access_token={}'.format(uri_gitlab, access_token)
 	req = requests.get(url)
 	with open('projects.json', 'w') as f:
 		f.write(json.dumps(req.json()))
