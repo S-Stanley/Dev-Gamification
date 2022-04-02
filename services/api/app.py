@@ -22,13 +22,14 @@ def fetch_info():
 	try:
 		access_token = request.form.get("access_token")
 		refresh_token = request.form.get("refresh_token")
-		if not access_token or not refresh_token:
+		uri_gitlab = request.form.get("uri_gitlab")
+		if not access_token or not refresh_token or not uri_gitlab:
 			raise Exception("Access or refresh token is empty")
-		user = gitlab.get_user_info(access_token)
-		all_projects = gitlab.get_all_project_by_user(access_token)
+		user = gitlab.get_user_info(access_token, uri_gitlab)
+		all_projects = gitlab.get_all_project_by_user(access_token, uri_gitlab)
 		for project in all_projects:
 			create_project(project)
-		all_merges = gitlab.get_all_merge_request_by_project_id(access_token, all_projects)
+		all_merges = gitlab.get_all_merge_request_by_project_id(access_token, all_projects, uri_gitlab)
 		for merge in all_merges:
 			create_merge(merge)
 		ladder = gitlab.count_merges(all_merges)
