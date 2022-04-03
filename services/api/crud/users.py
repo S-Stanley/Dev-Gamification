@@ -1,7 +1,7 @@
 from flask_pymongo import MongoClient
 import os, datetime
 
-mongo = MongoClient(os.environ['db_link']).dev
+mongo = MongoClient(os.environ['db_link'])[os.environ['database_name']]
 
 def find_user_by_email(email: str):
 	to_find = mongo.users.find_one({

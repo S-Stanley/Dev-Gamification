@@ -19,7 +19,7 @@ function App(){
                 <form>
                     <p>Do you use self hosted gitlab ?</p>
                     <div><input type='radio' name={'selfHostedRadio'} onClick={() => updateIsHosted(true)} />Yes</div>
-                    <div><input type='radio' name={'selfHostedRadio'} onClick={() => updateIsHosted(false)} />Non</div>
+                    <div><input type='radio' name={'selfHostedRadio'} onClick={() => updateIsHosted(false)} />No</div>
                 </form>
                 <div>
                     { isSelfHosted !== undefined &&

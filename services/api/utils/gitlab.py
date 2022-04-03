@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-import os, requests, json
+import os, requests, json, sys
 from tqdm import tqdm
 
 load_dotenv()
@@ -18,7 +18,7 @@ def sort_by_merges_number(e):
 	return len(e['merges'])
 
 def get_grad(nb_merge):
-	with open('services/api/grad.json', 'r') as f:
+	with open('grad.json', 'r') as f:
 		all_grades = json.loads(f.read())
 	for grade in all_grades:
 		if int(grade['number']) <= nb_merge:
@@ -28,7 +28,7 @@ def get_grad(nb_merge):
 			return previous
 
 def get_level(nb_merge: int):
-	with open('services/api/grad.json', 'r') as f:
+	with open('grad.json', 'r') as f:
 		all_grades = json.loads(f.read())
 	for grade in all_grades:
 		if int(grade['number']) <= nb_merge:
@@ -53,18 +53,22 @@ def count_merges(data):
 		})
 	return to_return
 
-def get_all_merge_request_by_project_id(access_token, projects, uri_gitlab):
+def get_all_merge_request_by_project_id(access_token, projects, uri_gitlab, last_fetch):
 	output = []
 	for project in projects:
 		items_get = 100
 		page = 0
 		while items_get == 100:
 			page += 1
-			url = '{}/api/v4/projects/{}/merge_requests?access_token={}&per_page=100&page={}'.format(uri_gitlab, project['id'], access_token, page)
+			if (last_fetch):
+				url = '{}/api/v4/projects/{}/merge_requests?access_token={}&per_page=100&page={}&created_after={}'.format(uri_gitlab, project['id'], access_token, page, last_fetch)
+			else:
+				url = '{}/api/v4/projects/{}/merge_requests?access_token={}&per_page=100&page={}'.format(uri_gitlab, project['id'], access_token, page)
 			req = requests.get(url)
 			items_get = len(req.json())
 			for i in req.json():
 				output.append(dict(i))
+	print(len(output))
 	with open('merges.json', 'w') as f:
 		f.write(json.dumps(output))
 	return output

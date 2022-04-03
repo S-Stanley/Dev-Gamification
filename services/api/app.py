@@ -1,15 +1,13 @@
-from http.client import HTTPResponse
-import json
-from flask import Flask, redirect, request, jsonify, render_template
+from flask import Flask, request, jsonify
 from utils import gitlab
-from flask_pymongo import PyMongo
 from flask_cors import CORS
-import os, datetime
-from crud.project import create_project, find_project
-from crud.merges import create_merge, find_merge
+import os
+from crud.project import create_project
+from crud.merges import create_merge, find_all_merges_by_project_id
 from crud.data import add_stats
-from crud.users import find_user_by_email, create_user
+from crud.users import create_user
 from crud.login import add_new_login
+from crud.fetch_stats import insert_new_fetch_request, get_last_fetch_request
 
 app = Flask(__name__)
 
@@ -26,18 +24,22 @@ def fetch_info():
 		if not access_token or not refresh_token or not uri_gitlab:
 			raise Exception("Access or refresh token is empty")
 		user = gitlab.get_user_info(access_token, uri_gitlab)
+		last_fetch = get_last_fetch_request(user['email'])
+		insert_new_fetch_request(user['email'])
 		all_projects = gitlab.get_all_project_by_user(access_token, uri_gitlab)
+		all_merges = []
 		for project in all_projects:
+			all_merges += find_all_merges_by_project_id(project['id'])
 			create_project(project)
-		all_merges = gitlab.get_all_merge_request_by_project_id(access_token, all_projects, uri_gitlab)
+		all_merges += gitlab.get_all_merge_request_by_project_id(access_token, all_projects, uri_gitlab, last_fetch)
 		for merge in all_merges:
 			create_merge(merge)
 		ladder = gitlab.count_merges(all_merges)
 		for player in ladder:
 			add_stats(player['username'], player['merges'])
 		create_user(user, {
-			access_token: access_token,
-			refresh_token: refresh_token,
+			'access_token': access_token,
+			'refresh_token': refresh_token,
 		})
 		add_new_login(user['email'])
 		return jsonify(ladder)

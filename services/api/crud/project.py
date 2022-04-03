@@ -1,7 +1,7 @@
 from flask_pymongo import MongoClient
 import os
 
-mongo = MongoClient(os.environ['db_link']).dev
+mongo = MongoClient(os.environ['db_link'])[os.environ['database_name']]
 
 def find_project(project_id: str):
 	to_find = mongo.projects.find_one({
