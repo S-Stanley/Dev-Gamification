@@ -1,14 +1,38 @@
 import React from "react";
 import Utils from "../utils/Utils";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App(){
-
     const [isSelfHosted, setIsSelfHosted] = React.useState<boolean>(undefined);
     const [uriGitlab, setUriGitlab] = React.useState<string>('https://gitlab.com');
+
+    const notify = (msg: string) => toast.error(msg);
 
     const updateIsHosted = (value: boolean) => {
         if (isSelfHosted === undefined || value !== isSelfHosted)
             setIsSelfHosted(value);
+    }
+
+    const onSubmit = (): void => {
+        if (isSelfHosted)
+        {
+            if (!uriGitlab) {
+                notify("Gitlab host url cannot be empty on self hosted");
+                return ;
+            }
+            if (uriGitlab.search('http') !== 0)
+            {
+                notify("Gitlab host url cannot need to start by http or https");
+                return ;
+            }
+            if (uriGitlab[uriGitlab.length - 1] === '/')
+            {
+                notify("Gitlab host url cannot end with a slash (/)");
+                return ;
+            }
+        }
+        window.location.replace(Utils.Gitlab.get_auth_uri(uriGitlab));
     }
 
     return (
@@ -30,11 +54,12 @@ function App(){
                                     <input type='text' value={uriGitlab} onChange={e => setUriGitlab(e.target.value)} />
                                 </div>
                             }
-                            <a href={Utils.Gitlab.get_auth_uri(uriGitlab)}><button>Signup with gitlab</button></a>
+                            <button onClick={onSubmit}>Signup with gitlab</button>
                         </div>
                     }
                 </div>
             </div>
+            <ToastContainer/>
         </React.Fragment>
     );
 }
