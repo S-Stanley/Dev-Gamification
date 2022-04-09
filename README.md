@@ -36,3 +36,4 @@ You will need somes environments variables, ask the maintainers.
 - MongoDB
 - React
 - Typescript
+- Docker
