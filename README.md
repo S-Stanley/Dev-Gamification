@@ -22,8 +22,9 @@ For the moment purpev is only working on gitlab.
 
 ### Usage
 
+Start all services:
 ```shell
-bash scripts/start-dev.sh # to run the front end server
+bash scripts/start-dev.sh #
 ```
 
 You will need somes environments variables, ask the maintainers.
