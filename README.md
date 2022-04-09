@@ -23,14 +23,10 @@ For the moment purpev is only working on gitlab.
 ### Usage
 
 ```shell
-bash scripts/start_webapp.sh # to run the front end server
+bash scripts/start-dev.sh # to run the front end server
 ```
 
-```shell
-bash scripts/start_api.sh to # run the back end server
-```
-
-You will need somes environments variables, ask the owner.
+You will need somes environments variables, ask the maintainers.
 
 ### Stack
 

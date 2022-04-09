@@ -15,6 +15,10 @@ CORS(app)
 
 app.config['MONGO_URI'] = os.environ['db_link']
 
+@app.route('/')
+def welcome():
+	return jsonify('API is running')
+
 @app.route('/fetch', methods=["POST"])
 def fetch_info():
 	try:
