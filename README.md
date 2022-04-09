@@ -24,7 +24,7 @@ For the moment purpev is only working on gitlab.
 
 Start all services:
 ```shell
-bash scripts/start-dev.sh #
+bash scripts/start-dev.sh
 ```
 
 You will need somes environments variables, ask the maintainers.
