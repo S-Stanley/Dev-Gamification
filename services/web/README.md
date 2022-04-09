@@ -1,17 +1,5 @@
 # Webapp
 
-### Usage
-
-Install dependencies
-```shell
-npm i
-```
-
-Launching the service:
-```shell
-npm start
-```
-
 ### Structure of the repository
 
 ```src/utils/``` Reusable functions
