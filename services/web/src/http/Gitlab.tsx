@@ -23,13 +23,14 @@ async function get_token(code: string): Promise<IGitlabToken | null>{
     }
 }
 
-async function fetch_data_from_gitlab(access_token: string, refresh_token :string): Promise<ILadder[] | null>{
+async function fetch_data_from_gitlab(access_token: string, refresh_token :string, basic_auth: string, uri_gitlab: string): Promise<ILadder[] | null>{
     try {
-        const uri_gitlab = localStorage.getItem('uriGitlab') ?? 'https://gitlab.com';
         const formData = new FormData();
         formData.append('access_token', access_token);
         formData.append('refresh_token', refresh_token);
         formData.append('uri_gitlab', uri_gitlab);
+        if (basic_auth)
+            formData.append('basic_auth', basic_auth);
         const req = await axios.post(`${Config.api}/fetch`, formData);
         return (req.data);
     }

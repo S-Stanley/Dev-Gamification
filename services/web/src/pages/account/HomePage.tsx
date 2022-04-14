@@ -12,7 +12,12 @@ function HomePage(){
     const [loading, setLoading] = React.useState<boolean>(true);
 
     async function fetch_data() {
-        const data: ILadder[] = await Http.Gitlab.fetch_data_from_gitlab(location.state['access_token'], location.state['refresh_token']);
+        const data: ILadder[] = await Http.Gitlab.fetch_data_from_gitlab(
+            location.state['access_token'],
+            location.state['refresh_token'],
+            location.state['basic_auth'],
+            location.state['uriGitlab'] ?? 'https://gitlab.com',
+        );
         if (data) {
             setLadder(data);
         }

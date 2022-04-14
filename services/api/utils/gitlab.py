@@ -53,7 +53,7 @@ def count_merges(data):
 		})
 	return to_return
 
-def get_all_merge_request_by_project_id(access_token, projects, uri_gitlab, last_fetch):
+def get_all_merge_request_by_project_id(access_token, projects, uri_gitlab, last_fetch, basic_auth):
 	output = []
 	for project in projects:
 		items_get = 100
@@ -64,27 +64,47 @@ def get_all_merge_request_by_project_id(access_token, projects, uri_gitlab, last
 				url = '{}/api/v4/projects/{}/merge_requests?access_token={}&per_page=100&page={}&created_after={}'.format(uri_gitlab, project['id'], access_token, page, last_fetch)
 			else:
 				url = '{}/api/v4/projects/{}/merge_requests?access_token={}&per_page=100&page={}'.format(uri_gitlab, project['id'], access_token, page)
-			req = requests.get(url)
+			if basic_auth:
+				req = requests.get(url, headers={
+					'authorization': f'Basic {basic_auth}'
+				})
+			else:
+				req = requests.get(url)
 			items_get = len(req.json())
-			for i in req.json():
-				output.append(dict(i))
-	print(len(output))
-	with open('merges.json', 'w') as f:
-		f.write(json.dumps(output))
+			if req.status_code == 200:
+				for i in req.json():
+					output.append(dict(i))
 	return output
 
 
-def get_user_info(access_token, uri_gitlab):
+def get_user_info(access_token, uri_gitlab, basic_auth):
 	url = '{}/api/v4/user?access_token={}'.format(uri_gitlab, access_token)
-	req = requests.get(url)
+	if basic_auth:
+		req = requests.get(url, headers={
+			'authorization': f'Basic {basic_auth}'
+		})
+	else:
+		req = requests.get(url)
 	return (req.json())
 
-def get_all_project_by_user(access_token, uri_gitlab):
-	url = '{}/api/v4/projects?membership=true&access_token={}'.format(uri_gitlab, access_token)
-	req = requests.get(url)
-	with open('projects.json', 'w') as f:
-		f.write(json.dumps(req.json()))
-	return req.json()
+def get_all_project_by_user(access_token, uri_gitlab, basic_auth):
+	per_page = 20
+	page = 0
+	project_download = 20
+	output = []
+	while project_download == 20:
+		url = '{}/api/v4/projects?membership=true&access_token={}&page={}&per_page={}'.format(uri_gitlab, access_token, page, per_page)
+		if basic_auth:
+			req = requests.get(url, headers={
+				'authorization': f'Basic {basic_auth}'
+			})
+		else:
+			req = requests.get(url)
+		for project in req.json():
+			output.append(project)
+		project_download = len(req.json())
+		page += 1
+	return output
 
 def get_auth_uri():
 	url = 'https://gitlab.com/oauth/authorize?client_id={}&redirect_uri={}&response_type=code&state={}&scope={}'.format(
@@ -105,5 +125,4 @@ def get_token(code):
 	}
 	url = f'https://gitlab.com/oauth/token'
 	req = requests.post(url, data)
-	print(req.status_code, req.text)
 	return req.json()
