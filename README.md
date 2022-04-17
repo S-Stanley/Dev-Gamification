@@ -1,5 +1,7 @@
 # Purpev
 
+> Statistics for gitlab
+
 ### Introduction
 
 Welcome to purpev, an open source projet to add some gamifications.

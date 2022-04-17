@@ -4,18 +4,18 @@ services:
 
   purpev-api:
     build:
-      context: services/api/
+      context: ../services/api/
       dockerfile: Dockerfile
     ports:
       - 1240:1240
     volumes:
-      - ./services/api/:/app
+      - ../services/api/:/app
 
   purpev-web:
     build:
-      context: services/web/
+      context: ../services/web/
       dockerfile: Dockerfile
     ports:
       - 1239:1239
     volumes:
-      - ./services/web/:/app
+      - ../services/web/:/app
