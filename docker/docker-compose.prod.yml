@@ -4,14 +4,14 @@ services:
 
   purpev-api:
     build:
-      context: services/api/
+      context: ../services/api/
       dockerfile: Dockerfile.prod
     ports:
       - 1240:1240
 
   purpev-web:
     build:
-      context: services/web/
+      context: ../services/web/
       dockerfile: Dockerfile.prod
     ports:
       - 1239:1239
