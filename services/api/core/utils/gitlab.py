@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-import os, requests, json, sys
+import os, requests, json
 from tqdm import tqdm
 
 load_dotenv()
@@ -13,6 +13,7 @@ def find_author_or_create(arr, item):
 		'username': item['author']['username'],
 		'merges': [item]
 	})
+	return (arr)
 
 def sort_by_merges_number(e):
 	return len(e['merges'])
@@ -40,6 +41,7 @@ def get_level(nb_merge: int):
 def count_merges(data):
 	output = []
 	for merge in tqdm(data):
+		print(merge)
 		if 'state' in merge and merge['state'] == 'merged':
 			find_author_or_create(output, merge)
 	output.sort(reverse=True, key=sort_by_merges_number)

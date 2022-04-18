@@ -19,7 +19,7 @@ function RedirectPage() {
         if (!authorization) {
             return ;
         }
-        navigate("/home", {
+        navigate("/loading", {
             state: {
                 access_token: authorization.access_token,
                 created_at: authorization.created_at,

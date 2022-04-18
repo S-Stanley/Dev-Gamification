@@ -41,7 +41,7 @@ const SelfHostedGitlab = ({ userAccessToken }) => {
         }
         const basic_auth = base64.encode(`${loginBasicAuth}:${passBasicAuth}`);
         if (userAccessToken) {
-            navigate('/home', {
+            navigate('/loading', {
                 state: {
                     access_token: userAccessToken,
                     refresh_token: '',

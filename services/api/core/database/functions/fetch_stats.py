@@ -1,5 +1,5 @@
 from flask_pymongo import MongoClient
-import os, datetime, json
+import os, datetime
 
 mongo = MongoClient(os.environ['db_link'])[os.environ['database_name']]
 
