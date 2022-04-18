@@ -1,66 +1,55 @@
 import React from "react";
-import { useLocation } from 'react-router-dom'
-
-import Http from "../../http/Http";
+import { useNavigate } from 'react-router-dom'
 import ILadder from "../../interfaces/ILadder";
+import Http from "../../http/Http";
 
 function HomePage(){
 
-    const location = useLocation();
+    const [ladder, setLadder] = React.useState<ILadder[]>([]);
 
-    const [ladder, setLadder] = React.useState<ILadder[]>(null);
-    const [loading, setLoading] = React.useState<boolean>(true);
+    const navigate = useNavigate();
 
-    async function fetch_data() {
-        const data: ILadder[] = await Http.Gitlab.fetch_data_from_gitlab(
-            location.state['access_token'],
-            location.state['refresh_token'],
-            location.state['basic_auth'],
-            location.state['uriGitlab'] ?? 'https://gitlab.com',
-        );
-        if (data) {
-            setLadder(data);
+    const fetch_data = async () => {
+        const username = localStorage.getItem('username');
+        if (!username){
+            alert('Cannot find your username, please try to login again.');
+            return ;
         }
-        setLoading(false);
+        const req = await Http.Ladder.getLadder(username);
+        if (req){
+            setLadder(req);
+        }
     }
 
     React.useEffect(() => {
         fetch_data();
-    }, [ false ]);
+    }, [false]);
 
     return (
-        <React.Fragment>
-            { loading ? (
-                <div>
-                    <p>Loading.. please wait</p>
-                </div>
-            ) : (
-                <div>
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th>Username</th>
-                                <th>Merges</th>
-                                <th>Level</th>
-                                <th>Grade</th>
+        <div>
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Merges</th>
+                        <th>Level</th>
+                        <th>Grade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {ladder.map((x, index) => {
+                        return (
+                            <tr key={index}>
+                                <td onClick={() => navigate(`/graph?login=${x.username}`)} style={{textDecoration: 'underline'}}>{x.username}</td>
+                                <td>{x.merges}</td>
+                                <td>{x.level}</td>
+                                <td>{x.grade}</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {ladder.map((x, index) => {
-                                return (
-                                    <tr key={index}>
-                                        <td>{x.username}</td>
-                                        <td>{x.merges}</td>
-                                        <td>{x.level}</td>
-                                        <td>{x.grade}</td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                </div>
-            )}
-        </React.Fragment>
+                        );
+                    })}
+                </tbody>
+            </table>
+        </div>
     );
 }
 

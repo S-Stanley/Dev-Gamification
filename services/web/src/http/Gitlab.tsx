@@ -23,7 +23,7 @@ async function get_token(code: string): Promise<IGitlabToken | null>{
     }
 }
 
-async function fetch_data_from_gitlab(access_token: string, refresh_token :string, basic_auth: string, uri_gitlab: string): Promise<ILadder[] | null>{
+async function fetch_data_from_gitlab(access_token: string, refresh_token :string, basic_auth: string, uri_gitlab: string): Promise<{username: string} | null>{
     try {
         const formData = new FormData();
         formData.append('access_token', access_token);
