@@ -8,6 +8,8 @@
 - add contributing [#57](https://github.com/S-Stanley/Purpev/issues/57)
 - add getting started doc [#58](https://github.com/S-Stanley/Purpev/issues/58)
 - update docker-compose file into it's own folder [#59](https://github.com/S-Stanley/Purpev/issues/59)
+- setup end2end webapp services [#10](https://github.com/S-Stanley/Purpev/issues/10)
+- setup ci [#11](https://github.com/S-Stanley/Purpev/issues/11)
 
 ## 1.1.0 (April 10, 2022)
 
