@@ -41,7 +41,6 @@ def get_level(nb_merge: int):
 def count_merges(data):
 	output = []
 	for merge in tqdm(data):
-		print(merge)
 		if 'state' in merge and merge['state'] == 'merged':
 			find_author_or_create(output, merge)
 	output.sort(reverse=True, key=sort_by_merges_number)
