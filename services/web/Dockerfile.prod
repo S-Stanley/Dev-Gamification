@@ -4,4 +4,6 @@ COPY . ./app
 WORKDIR /app
 RUN npm i
 
-CMD PORT=1239 npm run build && node purpev_client.js
+RUN PORT=1239 npm run build
+
+CMD node purpev_client.js
