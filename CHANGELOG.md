@@ -1,4 +1,4 @@
-## 1.2.0 (WIP)
+## 1.2.0 (April 24, 2022)
 - Err auth on self hosted gitlab with pass repo protection [#52](https://github.com/S-Stanley/Purpev/issues/52)
 - Create a LinkedIn page [#37](https://github.com/S-Stanley/Purpev/issues/37)
 - Add graphic about number of merge per week feature [#42](https://github.com/S-Stanley/Purpev/issues/42)
