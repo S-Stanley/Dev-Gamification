@@ -1,0 +1,19 @@
+name: CI
+on: [pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: build services
+        run: bash scripts/start-prod.sh
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: build services
+        run: |
+          bash scripts/start-prod.sh
+          npm i jest puppeteer
+          docker logs docker_purpev-web_1
+          bash scripts/run-test.sh
