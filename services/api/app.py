@@ -1,4 +1,5 @@
 import json
+from logging import exception
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
@@ -33,13 +34,13 @@ def get_ladder():
 	ladder = gitlab.count_merges(all_merges)
 	return (jsonify(ladder))
 
-@app.route('/fetch', methods=["POST"])
+@app.route('/fetch', methods=["GET"])
 def fetch_info():
 	try:
-		access_token = request.form.get("access_token")
-		refresh_token = request.form.get("refresh_token")
-		uri_gitlab = request.form.get("uri_gitlab")
-		basic_auth = request.form.get("basic_auth")
+		access_token = request.args.get("access_token")
+		refresh_token = request.args.get("refresh_token")
+		uri_gitlab = request.args.get("uri_gitlab")
+		basic_auth = request.args.get("basic_auth")
 		if not access_token or not uri_gitlab:
 			raise Exception("Access or refresh token is empty")
 		user = gitlab.get_user_info(access_token, uri_gitlab, basic_auth)
@@ -53,12 +54,14 @@ def fetch_info():
 			create_project_user(project['id'], user['username'])
 		all_merges += gitlab.get_all_merge_request_by_project_id(access_token, all_projects, uri_gitlab, last_fetch, basic_auth)
 		for merge in all_merges:
-			create_merge(merge)
+			if merge['state'] == 'merged':
+					create_merge(merge)
 		create_user(user, {
 			'access_token': access_token,
 			'refresh_token': refresh_token,
 		})
 		add_new_login(user['email'])
+		print('finish')
 		return jsonify({
 			'username': user['username'],
 		})

@@ -15,7 +15,7 @@ function HomePage(){
             alert('Cannot find your username, please try to login again.');
             return ;
         }
-        const req = await Http.Ladder.getLadder(username);
+        const req = await Http.Ladder.getLadder('stanley-serbin');
         if (req){
             setLadder(req);
         }
