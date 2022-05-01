@@ -11,7 +11,9 @@ from core.database.functions.users import create_user
 from core.database.functions.login import add_new_login
 from core.database.functions.fetch_stats import insert_new_fetch_request, get_last_fetch_request
 from core.database.functions.project_user import create_project_user, find_all_project_user_by_usermame
+
 from core.routes.graphs import graphs
+from core.routes.users import users
 
 app = Flask(__name__)
 
@@ -19,6 +21,7 @@ CORS(app)
 
 app.config['MONGO_URI'] = os.environ['db_link']
 app.register_blueprint(graphs, url_prefix='/graphs')
+app.register_blueprint(users, url_prefix='/users')
 
 @app.route('/')
 def welcome():
@@ -34,13 +37,13 @@ def get_ladder():
 	ladder = gitlab.count_merges(all_merges)
 	return (jsonify(ladder))
 
-@app.route('/fetch', methods=["GET"])
+@app.route('/fetch', methods=["POST"])
 def fetch_info():
 	try:
-		access_token = request.args.get("access_token")
-		refresh_token = request.args.get("refresh_token")
-		uri_gitlab = request.args.get("uri_gitlab")
-		basic_auth = request.args.get("basic_auth")
+		access_token = request.form.get("access_token")
+		refresh_token = request.form.get("refresh_token")
+		uri_gitlab = request.form.get("uri_gitlab")
+		basic_auth = request.form.get("basic_auth")
 		if not access_token or not uri_gitlab:
 			raise Exception("Access or refresh token is empty")
 		user = gitlab.get_user_info(access_token, uri_gitlab, basic_auth)

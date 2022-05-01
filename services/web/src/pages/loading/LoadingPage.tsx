@@ -10,13 +10,18 @@ const LoadingPage = () => {
     const navigate = useNavigate();
 
     async function fetch_data() {
-        Http.Gitlab.fetch_data_from_gitlab(
+        const data: {username: string} = await Http.Gitlab.fetch_data_from_gitlab(
             location.state['access_token'],
             location.state['refresh_token'],
             location.state['basic_auth'],
             location.state['uriGitlab'] ?? 'https://gitlab.com',
         );
-	    navigate('/home');
+        if (data) {
+            localStorage.setItem('username', data.username);
+            navigate('/home');
+        } else {
+            setError(true);
+        }
     }
 
     React.useEffect(() => {

@@ -1,9 +1,13 @@
 import Gitlab from "./Gitlab";
 import Graph from "./Graph";
 import Ladder from "./Ladder";
+import Users from "./Users";
 
-export default {
+const Http = {
     Gitlab,
     Graph,
     Ladder,
-};
+    Users,
+}
+
+export default Http;

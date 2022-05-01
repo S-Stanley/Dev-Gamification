@@ -11,6 +11,7 @@ import HomePage from './pages/account/HomePage'
 import RedirectPage from './pages/auth/RedirectPage';
 import GraphPage from './pages/graph/GraphPage';
 import LoadingPage from './pages/loading/LoadingPage'
+import AuthPage from './pages/auth/AuthPage'
 
 ReactDOM.render(
 	<BrowserRouter forceRefresh={false}>
@@ -20,6 +21,7 @@ ReactDOM.render(
 			<Route path='/redirect' element={<RedirectPage/>} exact={true} />
 			<Route path='/graph' element={<GraphPage/>} exact={true} />
 			<Route path='/loading' element={<LoadingPage/>} exact={true} />
+			<Route path='/auth' element={<AuthPage/>} exact={true} />
 		</Routes>
 	</BrowserRouter>,
   document.getElementById('root')

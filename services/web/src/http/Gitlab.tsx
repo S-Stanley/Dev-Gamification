@@ -31,10 +31,8 @@ async function fetch_data_from_gitlab(access_token: string, refresh_token :strin
         formData.append('uri_gitlab', uri_gitlab);
         if (basic_auth)
             formData.append('basic_auth', basic_auth);
-        const req = await axios.get(`${Config.api}/fetch?access_token=${access_token}&refresh_token=${refresh_token}&uri_gitlab=${uri_gitlab}&basic_auth=${basic_auth}`);
-        return ({
-            'username': 'S-Stanley'
-        });
+        const req = await axios.post(`${Config.api}/fetch`, formData);
+        return (req.data);
     }
     catch (e) {
         alert("There was an issue on our sidde, please try again later");
