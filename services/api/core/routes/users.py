@@ -1,6 +1,5 @@
-from crypt import methods
 import json
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, abort
 from ..database.functions.users import find_user_by_email, create_user
 from ..database.functions.login import add_new_login
 
@@ -14,10 +13,10 @@ def authentification_with_google():
 		name = request.form.get('name')
 		if not email:
 			print('Missing parameter email')
-			return jsonify('Missing parameter email', 400)
+			abort(400)
 		if not name:
 			print('Missing parameter name')
-			return jsonify('Missing parameter name', 400)
+			abort(400)
 		usr = find_user_by_email(email)
 		if not usr:
 			user_created = create_user({
@@ -26,16 +25,21 @@ def authentification_with_google():
 				'avatar_url': '',
 				'web_url': '',
 				'email': email,
+			}, {
 				'refresh_token': '',
 				'access_token': '',
 			})
 			if not user_created:
 				print('Errror while creating user {}'.format(email))
-				return jsonify('Errror while creating user', 400)
+				abort(400)
+			usr = find_user_by_email(email)
 		add_logn = add_new_login(email)
 		if not add_logn:
 			print('error while trying to add new login for user {}'.format(email))
-		return jsonify(True, 200)
+		print(usr)
+		return jsonify({
+			'user_id': str(usr['_id'])
+		})
 	except Exception as e:
 		print(e)
-		return jsonify("There was a error on our side, please try again later", 400)
+		abort(400)

@@ -10,7 +10,11 @@ const AuthPage = () => {
     const successResponseGoogle = async(response: GoogleLoginResponse) => {
         const req = await Http.Users.login_users_with_gmail(response.profileObj.email, response.profileObj.name);
         if (req) {
-            navigate('/projects');
+            navigate('/repo', {
+                state: {
+                    'user_id': req.user_id,
+                }
+            });
         }
     }
 

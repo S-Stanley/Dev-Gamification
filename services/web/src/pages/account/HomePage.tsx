@@ -1,29 +1,43 @@
 import React from "react";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import ILadder from "../../interfaces/ILadder";
 import Http from "../../http/Http";
 
 function HomePage(){
 
     const [ladder, setLadder] = React.useState<ILadder[]>([]);
+    const [loading, setLoading] = React.useState<boolean>(true);
+    const { repo_id } = useParams();
 
     const navigate = useNavigate();
 
     const fetch_data = async () => {
-        const username = localStorage.getItem('username');
-        if (!username){
-            alert('Cannot find your username, please try to login again.');
-            return ;
-        }
-        const req = await Http.Ladder.getLadder(username);
+        const req = await Http.Ladder.getLadder(repo_id);
         if (req){
             setLadder(req);
         }
+        setLoading(false);
     }
 
     React.useEffect(() => {
         fetch_data();
     }, [false]);
+
+    if (loading) {
+        return (
+            <React.Fragment>
+                <p>Loading, please wait.</p>
+            </React.Fragment>
+        )
+    }
+
+    if (ladder.length === 0) {
+        return (
+            <React.Fragment>
+                <p>We don't have any data for the moment. Data is fetch once a day at midnight</p>
+            </React.Fragment>
+        )
+    }
 
     return (
         <div>

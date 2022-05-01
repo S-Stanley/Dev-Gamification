@@ -1,6 +1,4 @@
-import json
-from logging import exception
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 from flask_cors import CORS
 import os
 from core.utils import gitlab
@@ -10,10 +8,11 @@ from core.database.functions.data import add_stats
 from core.database.functions.users import create_user
 from core.database.functions.login import add_new_login
 from core.database.functions.fetch_stats import insert_new_fetch_request, get_last_fetch_request
-from core.database.functions.project_user import create_project_user, find_all_project_user_by_usermame
+from core.database.functions.project_user import create_project_user, find_all_project_user_by_repo_id
 
 from core.routes.graphs import graphs
 from core.routes.users import users
+from core.routes.repo import repo
 
 app = Flask(__name__)
 
@@ -22,6 +21,8 @@ CORS(app)
 app.config['MONGO_URI'] = os.environ['db_link']
 app.register_blueprint(graphs, url_prefix='/graphs')
 app.register_blueprint(users, url_prefix='/users')
+app.register_blueprint(repo, url_prefix='/repo')
+
 
 @app.route('/')
 def welcome():
@@ -29,8 +30,11 @@ def welcome():
 
 @app.route('/ladder')
 def get_ladder():
-	username = request.args.get('username')
-	all_projects = find_all_project_user_by_usermame(username)
+	repo_id = request.args.get('repo_id')
+	if not repo_id:
+		print('missing user_id or repo_id')
+		abort(400)
+	all_projects = find_all_project_user_by_repo_id(repo_id)
 	all_merges = []
 	for project_user in all_projects:
 		all_merges += (find_all_merges_by_project_id(project_user['project_id']))

@@ -1,4 +1,3 @@
-from heapq import merge
 from flask_pymongo import MongoClient
 import os
 
@@ -6,8 +5,6 @@ mongo = MongoClient(os.environ['db_link'])[os.environ['database_name']]
 
 def find_merge(merge_id: str):
 	try:
-		print(merge_id)
-		print(merge)
 		to_find = mongo.merges.find_one({
 			'id': merge_id,
 		})
