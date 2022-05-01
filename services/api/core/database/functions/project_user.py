@@ -26,3 +26,13 @@ def find_all_project_user_by_usermame(username):
     for i in to_find:
         output.append(i)
     return (output)
+
+def find_all_project_user_by_repo_id(repo_id: str):
+    to_find = mongo.project_user.find({
+        'repo_id': repo_id,
+    })
+    output = []
+    for i in to_find:
+        i['_id'] = str(i['_id'])
+        output.append(i)
+    return (output)

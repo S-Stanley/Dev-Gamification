@@ -1,11 +1,18 @@
 from flask_pymongo import MongoClient
 import os, datetime
+from bson.objectid import ObjectId
 
 mongo = MongoClient(os.environ['db_link'])[os.environ['database_name']]
 
 def find_user_by_email(email: str):
 	to_find = mongo.users.find_one({
 		'email': email
+	})
+	return to_find
+
+def find_user_by_id(user_id: str):
+	to_find = mongo.users.find_one({
+		'_id': ObjectId(user_id)
 	})
 	return to_find
 

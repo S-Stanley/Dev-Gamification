@@ -62,9 +62,9 @@ def get_all_merge_request_by_project_id(access_token, projects, uri_gitlab, last
 		while items_get == 100:
 			page += 1
 			if (last_fetch):
-				url = '{}/api/v4/projects/{}/merge_requests?access_token={}&per_page=100&page={}&created_after={}'.format(uri_gitlab, project['id'], access_token, page, last_fetch)
+				url = '{}/api/v4/projects/{}/merge_requests/?access_token={}&per_page=100&page={}&created_after={}&state=merged'.format(uri_gitlab, project['id'], access_token, page, last_fetch)
 			else:
-				url = '{}/api/v4/projects/{}/merge_requests?access_token={}&per_page=100&page={}'.format(uri_gitlab, project['id'], access_token, page)
+				url = '{}/api/v4/projects/{}/merge_requests/?access_token={}&per_page=100&page={}&state=merged'.format(uri_gitlab, project['id'], access_token, page)
 			if basic_auth:
 				req = requests.get(url, headers={
 					'authorization': f'Basic {basic_auth}'

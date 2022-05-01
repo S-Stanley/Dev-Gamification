@@ -2,9 +2,9 @@ import axios from "axios";
 import Config from "../Config";
 import ILadder from "../interfaces/ILadder";
 
-const getLadder = async(username: string): Promise<ILadder[]> => {
+const getLadder = async(repo_id: string): Promise<ILadder[]> => {
     try {
-        const req = await axios.get(`${Config.api}/ladder?username=${username}`);
+        const req = await axios.get(`${Config.api}/ladder?repo_id=${repo_id}`);
         return (req.data);
     }
     catch {
@@ -12,6 +12,8 @@ const getLadder = async(username: string): Promise<ILadder[]> => {
     }
 }
 
-export default {
+const Ladder = {
     getLadder,
 }
+
+export default Ladder;
