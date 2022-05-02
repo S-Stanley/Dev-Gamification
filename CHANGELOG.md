@@ -1,4 +1,4 @@
-## 1.2.3 (May 2, 2022)
+## 1.2.1 (May 2, 2022)
 - Fetch data once a midnight [#82](https://github.com/S-Stanley/Purpev/issues/82)
 - Fix err 504 on /fetch [#74](https://github.com/S-Stanley/Purpev/issues/74)
 - Signup with gmail [#24](https://github.com/S-Stanley/Purpev/issues/24)
