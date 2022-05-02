@@ -3,6 +3,7 @@
 - Fix err 504 on /fetch [#74](https://github.com/S-Stanley/Purpev/issues/74)
 - Signup with gmail [#24](https://github.com/S-Stanley/Purpev/issues/24)
 - Redirect / on /auth on webapp [#85](https://github.com/S-Stanley/Purpev/issues/85)
+- Possibility to add multiple repo/project with only one account [#83](https://github.com/S-Stanley/Purpev/issues/83) 
 
 ## 1.2.0 (April 24, 2022)
 - Err auth on self hosted gitlab with pass repo protection [#52](https://github.com/S-Stanley/Purpev/issues/52)
