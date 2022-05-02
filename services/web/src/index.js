@@ -6,7 +6,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import App from './pages/App';
 import HomePage from './pages/account/HomePage';
 import RedirectPage from './pages/auth/RedirectPage';
 import GraphPage from './pages/graph/GraphPage';
@@ -18,7 +17,7 @@ import CreateRepoPage from './pages/repo/CreateRepoPage'
 ReactDOM.render(
 	<BrowserRouter forceRefresh={false}>
 		<Routes>
-			<Route path='/' element={<App/>} exact={true} />
+			<Route path='/' element={<AuthPage/>} exact={true} />
 			<Route path='/ladder/:repo_id' element={<HomePage/>} exact={true} />
 			<Route path='/redirect' element={<RedirectPage/>} exact={true} />
 			<Route path='/graph' element={<GraphPage/>} exact={true} />
