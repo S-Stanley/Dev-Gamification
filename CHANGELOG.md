@@ -1,3 +1,9 @@
+## 1.2.3 (May 2, 2022)
+- Fetch data once a midnight [#82](https://github.com/S-Stanley/Purpev/issues/82)
+- Fix err 504 on /fetch [#74](https://github.com/S-Stanley/Purpev/issues/74)
+- Signup with gmail [#24](https://github.com/S-Stanley/Purpev/issues/24)
+- Redirect / on /auth on webapp [#85](https://github.com/S-Stanley/Purpev/issues/85)
+
 ## 1.2.0 (April 24, 2022)
 - Err auth on self hosted gitlab with pass repo protection [#52](https://github.com/S-Stanley/Purpev/issues/52)
 - Create a LinkedIn page [#37](https://github.com/S-Stanley/Purpev/issues/37)
