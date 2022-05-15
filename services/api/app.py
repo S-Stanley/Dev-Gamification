@@ -31,6 +31,7 @@ def welcome():
 @app.route('/ladder')
 def get_ladder():
 	repo_id = request.args.get('repo_id')
+	sorted_by = request.args.get('sorted_by')
 	if not repo_id:
 		print('missing user_id or repo_id')
 		abort(400)
@@ -38,7 +39,7 @@ def get_ladder():
 	all_merges = []
 	for project_user in all_projects:
 		all_merges += (find_all_merges_by_project_id(project_user['project_id']))
-	ladder = gitlab.count_merges(all_merges)
+	ladder = gitlab.count_merges(all_merges, sorted_by)
 	return (jsonify(ladder))
 
 @app.route('/fetch', methods=["POST"])

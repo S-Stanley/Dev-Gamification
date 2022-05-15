@@ -2,9 +2,9 @@ import axios from "axios";
 import Config from "../Config";
 import ILadder from "../interfaces/ILadder";
 
-const getLadder = async(repo_id: string): Promise<ILadder[]> => {
+const getLadder = async(repo_id: string, sortBy: string): Promise<ILadder[]> => {
     try {
-        const req = await axios.get(`${Config.api}/ladder?repo_id=${repo_id}`);
+        const req = await axios.get(`${Config.api}/ladder?repo_id=${repo_id}&sorted_by=${sortBy}`);
         return (req.data);
     }
     catch {

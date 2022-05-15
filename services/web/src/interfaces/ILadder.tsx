@@ -3,6 +3,7 @@ interface ILadder {
     merges: string,
     username: string,
     level: number,
+    weight: number,
 }
 
 export default ILadder;

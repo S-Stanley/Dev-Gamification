@@ -4,7 +4,6 @@ from tqdm import tqdm
 from dotenv import load_dotenv
 
 load_dotenv()
-
 mongo = MongoClient(os.environ['db_link'])[os.environ['database_name']]
 
 def fetch_repo() -> list:
@@ -102,6 +101,83 @@ def get_all_projects_by_user_id(user_id: str):
 	})
 	return (data)
 
+def find_issue(issue_id: str):
+	to_find = mongo.issues.find_one({
+		'id': issue_id,
+	})
+	return to_find
+
+def save_issue_merge_request(issue):
+	if find_issue(issue['id']): return
+	mongo.issues.insert_one(issue)
+
+def find_weigh_merge_request_by_username(username: str, issue_id: str):
+	to_find = mongo.weight.find_one({
+		'username': username,
+		'issue_id': issue_id,
+	})
+	if to_find:
+		return to_find
+	return (False)
+
+def save_weigh_merge_request_by_username(
+	username: str,
+	repo_id: str,
+	project_user_id: str,
+	uri: str,
+	weight_to_add: str,
+	issue_id: str,
+):
+	if find_weigh_merge_request_by_username(username, issue_id): return
+	else:
+		mongo.weight.insert_one({
+			'username': username,
+			'repo_id': repo_id,
+			'project_user_id': project_user_id,
+			'uri': uri,
+			'weight_to_add': weight_to_add,
+			'issue_id': issue_id,
+	})
+
+def fetch_issues_that_close_merge_request(merge, repo, project_id):
+		url = '{}/api/v4/projects/{}/merge_requests/{}/closes_issues?membership=true&access_token={}'.format(repo['uri'], project_id, merge['iid'], repo['personal_token'])
+		if repo['basic_auth']:
+			req = requests.get(url, headers={
+				'authorization': 'Basic {}'.format(repo['basic_auth'])
+			})
+		else:
+			req = requests.get(url)
+		if (req.status_code == 200) and len(req.json()) > 0:
+			issue = req.json()[0]
+			save_weigh_merge_request_by_username(
+				merge['author']['username'],
+				str(repo['_id']),
+				project_id,
+				repo['uri'],
+				issue['weight'],
+				issue['id']
+			)
+		return (req.json())
+
+def find_all_project_user_by_repo_id(repo_id: str):
+    to_find = mongo.project_user.find({
+        'repo_id': repo_id,
+    })
+    output = []
+    for i in to_find:
+        i['_id'] = str(i['_id'])
+        output.append(i)
+    return (output)
+
+def find_all_merges_by_project_id(project_id: str):
+	to_find = mongo.merges.find({
+		'project_id': project_id,
+	})
+	output = []
+	for i in to_find:
+		output.append(i)
+	return (output)
+
 all_repo = fetch_repo()
 for repo in all_repo:
 	projects = get_all_projects_by_users(repo)
@@ -113,3 +189,11 @@ for repo in all_repo:
 		all_merges = fetch_merge_requests_by_project_users(repo, project_user['project_id'])
 		for merges in all_merges:
 			create_merge(merges)
+
+all_repo = fetch_repo()
+for repo in all_repo:
+	all_project_users = find_all_project_user_by_repo_id(str(repo['_id']))
+	for project_user in all_project_users:
+		all_merges = find_all_merges_by_project_id(project_user['project_id'])
+		for merge in tqdm(all_merges):
+			fetch_issues_that_close_merge_request(merge, repo, project_user['project_id'])
