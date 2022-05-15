@@ -1,6 +1,9 @@
 from dotenv import load_dotenv
+from flask_pymongo import MongoClient
 import os, requests, json
 from tqdm import tqdm
+
+mongo = MongoClient(os.environ['db_link'])[os.environ['database_name']]
 
 load_dotenv()
 
@@ -16,7 +19,10 @@ def find_author_or_create(arr, item):
 	return (arr)
 
 def sort_by_merges_number(e):
-	return len(e['merges'])
+	return e['merges']
+
+def sort_by_weight_total(e):
+	return e['weight']
 
 def get_grad(nb_merge):
 	with open('grad.json', 'r') as f:
@@ -38,12 +44,22 @@ def get_level(nb_merge: int):
 		else:
 			return previous
 
-def count_merges(data):
+def count_weight_by_username(username: str):
+	to_find = mongo.weight.find({
+		'username': username
+	})
+	total = 0
+	output = []
+	for i in to_find:
+		if i['weight_to_add']:
+			total += int(i['weight_to_add'])
+	return (total)
+
+def count_merges(data, sorted_by: str):
 	output = []
 	for merge in tqdm(data):
 		if 'state' in merge and merge['state'] == 'merged':
 			find_author_or_create(output, merge)
-	output.sort(reverse=True, key=sort_by_merges_number)
 	to_return = []
 	for i in output:
 		to_return.append({
@@ -51,7 +67,14 @@ def count_merges(data):
 			'merges': len(i['merges']),
 			'grade': get_grad(len(i['merges'])),
 			'level': get_level(len(i['merges'])),
+			'weight': count_weight_by_username(i['username']),
 		})
+	if not sorted_by:
+		to_return.sort(reverse=True, key=sort_by_merges_number)
+	elif sorted_by == 'weight':
+		to_return.sort(reverse=True, key=sort_by_weight_total)
+	else:
+		to_return.sort(reverse=True, key=sort_by_merges_number)
 	return to_return
 
 def get_all_merge_request_by_project_id(access_token, projects, uri_gitlab, last_fetch, basic_auth):
