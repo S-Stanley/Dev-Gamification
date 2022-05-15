@@ -1,6 +1,9 @@
 import requests, os
 from flask_pymongo import MongoClient
 from tqdm import tqdm
+from dotenv import load_dotenv
+
+load_dotenv()
 
 mongo = MongoClient(os.environ['db_link'])[os.environ['database_name']]
 
