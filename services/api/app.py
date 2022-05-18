@@ -1,6 +1,8 @@
+from time import time
 from flask import Flask, request, jsonify, abort
 from flask_cors import CORS
 import os
+from datetime import datetime, timedelta
 from core.utils import gitlab
 from core.database.functions.project import create_project
 from core.database.functions.merges import create_merge, find_all_merges_by_project_id
@@ -41,6 +43,43 @@ def get_ladder():
 		all_merges += (find_all_merges_by_project_id(project_user['project_id']))
 	ladder = gitlab.count_merges(all_merges, sorted_by)
 	return (jsonify(ladder))
+
+@app.route('/ladder/month/weight')
+def get_ladder_weight_by_month():
+	try:
+		repo_id = request.args.get('repo_id')
+		if not repo_id:
+			print('missing user_id or repo_id')
+			abort(400)
+		all_projects = find_all_project_user_by_repo_id(repo_id)
+		all_merges = []
+		for project_user in all_projects:
+			all_merges += (find_all_merges_by_project_id(project_user['project_id']))
+		all_authors = gitlab.get_all_authors_in_all_merges(all_merges)
+		to_return = []
+		for author in all_authors:
+			all_merge_by_username = gitlab.get_all_merge_by_author(all_merges, author)
+			for merge_by_username in all_merge_by_username:
+				this_year = datetime.now().year
+				this_month = datetime.now().month - 3
+				total_weight_by_user_and_month = 0
+				while this_month <= datetime.now().month:
+					if (int(this_month) < 10):
+						this_month = f'0{this_month}'
+						dt = merge_by_username['merged_at'].split('T')[0].split('-')
+						if (dt[0] == str(this_year)) and (dt[1] == this_month):
+							weight = gitlab.get_weight_by_merge(merge_by_username['id'])
+							if weight:
+								total_weight_by_user_and_month += weight
+				to_return.append({
+					'username': author,
+					'month': this_month,
+					'weight': total_weight_by_user_and_month,
+				})
+			return jsonify(to_return)
+	except Exception as e:
+		print(e)
+		return ("error while fetching data", 400)
 
 @app.route('/fetch', methods=["POST"])
 def fetch_info():

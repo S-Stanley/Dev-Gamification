@@ -55,6 +55,25 @@ def count_weight_by_username(username: str):
 			total += int(i['weight_to_add'])
 	return (total)
 
+def get_all_authors_in_all_merges(data):
+	authors = []
+	for item in data:
+		if not item['author']['username'] in authors:
+			authors.append(item['author']['username'])
+	return (authors)
+
+def get_all_merge_by_author(all_merges, author):
+	output = []
+	for merge in all_merges:
+		if merge['author']['username'] == author:
+			output.append(merge)
+	return (output)
+
+def get_weight_by_merge(merge_id):
+	# should get the issues related to a MR
+	# Maybe it will be necessary to have a collection issues_related_merge_request who store {id, issues_id, merge_request_id}
+	return (None)
+
 def count_merges(data, sorted_by: str):
 	output = []
 	for merge in tqdm(data):
