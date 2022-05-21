@@ -18,7 +18,7 @@ def find_user_by_id(user_id: str):
 
 def create_user(usr, auth):
 	if find_user_by_email(usr['email']): return
-	mongo.users.insert_one({
+	user_created = mongo.users.insert_one({
 		'name': usr['name'],
 		'username': usr['username'],
 		'avatar_url': usr['avatar_url'],
@@ -28,3 +28,6 @@ def create_user(usr, auth):
 		'access_token': auth['access_token'],
 		'created_at': str(datetime.datetime.now())
 	})
+	if not user_created:
+		return (False)
+	return (True)
