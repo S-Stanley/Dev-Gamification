@@ -30,6 +30,7 @@ def authentification_with_google():
 				'access_token': '',
 			})
 			if not user_created:
+				print(user_created)
 				print('Errror while creating user {}'.format(email))
 				abort(400)
 			usr = find_user_by_email(email)
