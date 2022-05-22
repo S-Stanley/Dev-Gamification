@@ -4,6 +4,7 @@ interface ILadder {
     username: string,
     level: number,
     weight: number,
+    average_weight: number,
 }
 
 export default ILadder;

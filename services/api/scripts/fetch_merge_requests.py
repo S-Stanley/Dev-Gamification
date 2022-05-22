@@ -1,4 +1,4 @@
-import requests, os
+import requests, os, time
 from flask_pymongo import MongoClient
 from tqdm import tqdm
 from dotenv import load_dotenv
@@ -139,6 +139,35 @@ def save_weigh_merge_request_by_username(
 			'issue_id': issue_id,
 	})
 
+def find_issue_by_id(issues_id):
+	to_find = mongo.issues.find_one({
+		'id': issues_id,
+	})
+	if to_find:
+		return (to_find)
+	return (False)
+
+
+def save_issue(issue):
+	if find_issue_by_id(issue['id']): return
+	mongo.issues.insert_one(issue)
+
+def find_issue_related_mr(issues_id, merge_id):
+	to_find = mongo.issues_related_mr.find_one({
+		"issue_id": issues_id,
+		"merge_id": merge_id
+	})
+	if to_find:
+		return (to_find)
+	return (False)
+
+def save_issue_related_mr(issues_id, merge_id):
+	if find_issue_related_mr(issues_id, merge_id): return
+	mongo.issues_related_mr.insert_one({
+		"issue_id": issues_id,
+		"merge_id": merge_id
+	})
+
 def fetch_issues_that_close_merge_request(merge, repo, project_id):
 		url = '{}/api/v4/projects/{}/merge_requests/{}/closes_issues?membership=true&access_token={}'.format(repo['uri'], project_id, merge['iid'], repo['personal_token'])
 		if repo['basic_auth']:
@@ -149,14 +178,8 @@ def fetch_issues_that_close_merge_request(merge, repo, project_id):
 			req = requests.get(url)
 		if (req.status_code == 200) and len(req.json()) > 0:
 			issue = req.json()[0]
-			save_weigh_merge_request_by_username(
-				merge['author']['username'],
-				str(repo['_id']),
-				project_id,
-				repo['uri'],
-				issue['weight'],
-				issue['id']
-			)
+			save_issue(issue)
+			save_issue_related_mr(issue['id'], merge['id'])
 		return (req.json())
 
 def find_all_project_user_by_repo_id(repo_id: str):
@@ -196,4 +219,5 @@ for repo in all_repo:
 	for project_user in all_project_users:
 		all_merges = find_all_merges_by_project_id(project_user['project_id'])
 		for merge in tqdm(all_merges):
+			time.sleep(2)
 			fetch_issues_that_close_merge_request(merge, repo, project_user['project_id'])
