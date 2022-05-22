@@ -1,3 +1,4 @@
+from heapq import merge
 from dotenv import load_dotenv
 from flask_pymongo import MongoClient
 import os, requests, json
@@ -24,6 +25,9 @@ def sort_by_merges_number(e):
 def sort_by_weight_total(e):
 	return e['weight']
 
+def sort_by_average_weight(e):
+	return e['average_weight']
+
 def get_grad(nb_merge):
 	with open('grad.json', 'r') as f:
 		all_grades = json.loads(f.read())
@@ -44,35 +48,70 @@ def get_level(nb_merge: int):
 		else:
 			return previous
 
-def count_weight_by_username(username: str):
-	to_find = mongo.weight.find({
-		'username': username
+def find_issue_related_mr(merge_id: str):
+	issue_related_mr = mongo.issues_related_mr.find_one({
+		"merge_id": merge_id,
 	})
-	total = 0
-	output = []
-	for i in to_find:
-		if i['weight_to_add']:
-			total += int(i['weight_to_add'])
-	return (total)
+	if issue_related_mr:
+		issue = mongo.issues.find_one({
+			'id': issue_related_mr['issue_id']
+		})
+		if issue and issue['weight']:
+			return (issue['weight'])
+	return (0)
 
-def count_merges(data, sorted_by: str):
+def count_weight_by_username(all_merges_users: str):
+	total_weight = 0
+	total_mr_weighted = 0
+	for merge in all_merges_users:
+		res = find_issue_related_mr(merge['id'])
+		if res != 0:
+			total_mr_weighted += 1
+		total_weight += res
+	if (total_mr_weighted == 0):
+		average_weight =  0
+	else:
+		average_weight =  (total_weight / total_mr_weighted)
+	return (total_weight, average_weight)
+
+def get_all_authors_from_all_merges(all_merges):
+	authors = []
+	for merge in all_merges:
+		if merge['author']['username'] not in authors:
+			authors.append(merge['author']['username'])
+	return (authors)
+
+def get_all_merge_by_author(username: str, all_merges, month: str, year: str):
 	output = []
-	for merge in tqdm(data):
-		if 'state' in merge and merge['state'] == 'merged':
-			find_author_or_create(output, merge)
+	for merge in all_merges:
+		if merge['author']['username'] == username and merge['state'] == 'merged':
+			if month == 'ALL':
+				output.append(merge)
+			else:
+				if int(merge['merged_at'].split('-')[1]) == int(month) and int(merge['merged_at'].split('-')[0]) == int(year):
+					output.append(merge)
+	return (output)
+
+def count_merges(data, sorted_by: str, month: str, year: str):
+	authors = get_all_authors_from_all_merges(data)
 	to_return = []
-	for i in output:
+	for username in authors:
+		all_merge_by_author = get_all_merge_by_author(username, data, month, year)
+		total_weight, average_weight = count_weight_by_username(all_merge_by_author)
 		to_return.append({
-			'username': i['username'],
-			'merges': len(i['merges']),
-			'grade': get_grad(len(i['merges'])),
-			'level': get_level(len(i['merges'])),
-			'weight': count_weight_by_username(i['username']),
+			'username': username,
+			'merges': len(all_merge_by_author),
+			'grade': get_grad(len(all_merge_by_author)),
+			'level': get_level(len(all_merge_by_author)),
+			'weight': total_weight,
+			'average_weight': round(average_weight, 2),
 		})
 	if not sorted_by:
 		to_return.sort(reverse=True, key=sort_by_merges_number)
 	elif sorted_by == 'weight':
 		to_return.sort(reverse=True, key=sort_by_weight_total)
+	elif sorted_by == 'average_weight':
+		to_return.sort(reverse=True, key=sort_by_average_weight)
 	else:
 		to_return.sort(reverse=True, key=sort_by_merges_number)
 	return to_return
