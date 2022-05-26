@@ -1,3 +1,11 @@
+## 1.3.0 (May 26, 2022)
+- Create cron job to fetch data every day [#84](https://github.com/S-Stanley/Purpev/issues/84)
+- Add position (rank) to ladder [#64](https://github.com/S-Stanley/Purpev/issues/64)
+- Add weight issues close by MR [#96](https://github.com/S-Stanley/Purpev/issues/96)
+- Fix bug with login with unregistered account [#100](https://github.com/S-Stanley/Purpev/issues/100)
+- Store issues that close a merge request and update compute in accordance [#103](https://github.com/S-Stanley/Purpev/issues/103)
+- Ladder issues weight close by developer by months [#78](https://github.com/S-Stanley/Purpev/issues/78)
+
 ## 1.2.1 (May 2, 2022)
 - Fetch data once a midnight [#82](https://github.com/S-Stanley/Purpev/issues/82)
 - Fix err 504 on /fetch [#74](https://github.com/S-Stanley/Purpev/issues/74)
