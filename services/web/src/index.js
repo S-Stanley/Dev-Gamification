@@ -5,6 +5,10 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
 import HomePage from './pages/account/HomePage';
 import RedirectPage from './pages/auth/RedirectPage';
@@ -12,12 +16,13 @@ import GraphPage from './pages/graph/GraphPage';
 import LoadingPage from './pages/loading/LoadingPage';
 import AuthPage from './pages/auth/AuthPage';
 import RepoPage from './pages/repo/RepoPage';
-import CreateRepoPage from './pages/repo/CreateRepoPage'
+import CreateRepoPage from './pages/repo/CreateRepoPage';
+import NavigationMenuComponent from './components/NavigationMenuComponent'
 
 ReactDOM.render(
 	<BrowserRouter forceRefresh={false}>
+		<NavigationMenuComponent/>
 		<Routes>
-			<Route path='/' element={<AuthPage/>} exact={true} />
 			<Route path='/ladder/:repo_id' element={<HomePage/>} exact={true} />
 			<Route path='/redirect' element={<RedirectPage/>} exact={true} />
 			<Route path='/graph' element={<GraphPage/>} exact={true} />
