@@ -10,6 +10,7 @@ const AuthPage = () => {
     const successResponseGoogle = async(response: GoogleLoginResponse) => {
         const req = await Http.Users.login_users_with_gmail(response.profileObj.email, response.profileObj.name);
         if (req) {
+            localStorage.setItem('token', "ABC");
             navigate('/repo', {
                 state: {
                     'user_id': req.user_id,
@@ -30,7 +31,7 @@ const AuthPage = () => {
                 onSuccess={successResponseGoogle}
                 onFailure={errorResponseGoogle}
                 cookiePolicy={'single_host_origin'}
-            />,
+            />
         </React.Fragment>
     )
 }

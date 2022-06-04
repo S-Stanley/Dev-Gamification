@@ -2,11 +2,12 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Http from '../../http/Http';
 import base64 from 'base-64';
+import { TextField, Box, Typography, Button, Grid } from '@mui/material';
 
 const CreateRepoPage = () => {
 
     const [personalToken, setPersonalToken] = React.useState<string>('');
-    const [uri, setUri] = React.useState<string>('https://gitlab.com');
+    const [uri, setUri] = React.useState<string>();
     const [basicAuthLogin, setBasicAuthLogin] = React.useState<string>('');
     const [basicAuthPassowrd, setBasicAuthPassowrd] = React.useState<string>('');
 
@@ -35,30 +36,44 @@ const CreateRepoPage = () => {
 
     return (
         <React.Fragment>
-            <div>
-                <div>
-                    <label>Personal token* <a href="https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html" target='_blank' rel='noreferrer'>(More info)</a> </label><br />
-                    <input value={personalToken} onChange={(e) => setPersonalToken(e.target.value)} /><br />
-                </div>
-                <div>
-                    <label>Host where the repo is stored (ex: https://gitlab.com)*</label><br />
-                    <input value={uri} onChange={(e) => setUri(e.target.value)} />
-                </div>
-                <div>
-                    <label>Login basic auth<a href="https://en.wikipedia.org/wiki/Basic_access_authentication" target='_blank' rel='noreferrer'>(More info)</a></label><br />
-                    <input value={basicAuthLogin} onChange={(e) => setBasicAuthLogin(e.target.value)} />
-                </div>
-                <div>
-                    <label>Password basic auth<a href="https://en.wikipedia.org/wiki/Basic_access_authentication" target='_blank' rel='noreferrer'>(More info)</a></label><br />
-                    <input value={basicAuthPassowrd} onChange={(e) => setBasicAuthPassowrd(e.target.value)} />
-                </div>
-                <div>
-                    <button
-                        onClick={onSubmit}
-                    >
-                        Save
-                    </button>
-                </div>
+            <Grid container justifyContent='center' style={{paddingTop: '40px', textAlign: 'center'}}>
+                <Typography variant='h3'>
+                    Add a new repository
+                </Typography>
+            </Grid>
+            <div style={{paddingTop: '40px'}}>
+                <Box
+                    component="form"
+                    sx={{
+                        '& .MuiTextField-root': { m: 1, width: '25ch' },
+                    }}
+                    noValidate
+                    autoComplete="off"
+                    justifyContent='center'
+                >
+                    <Grid container justifyContent='center'>
+                        <Grid item xs={12} style={{textAlign: 'center'}}>
+                            <TextField value={personalToken} onChange={(e) => setPersonalToken(e.target.value)} label='Personal token'/>
+                        </Grid>
+                        <Grid item xs={12} style={{textAlign: 'center'}}>
+                            <TextField value={uri} onChange={(e) => setUri(e.target.value)} label='Host where the repo is stored' helperText='e.g: https://gitlab.com' />
+                        </Grid>
+                        <Grid item xs={12} style={{textAlign: 'center'}}>
+                            <TextField value={basicAuthLogin} onChange={(e) => setBasicAuthLogin(e.target.value)} label='Login basic auth' />
+                        </Grid>
+                        <Grid item xs={12} style={{textAlign: 'center'}}>
+                            <TextField value={basicAuthPassowrd} onChange={(e) => setBasicAuthPassowrd(e.target.value)} label='Password basic auth'/>
+                        </Grid>
+                    </Grid>
+                    <Grid container justifyContent='center' style={{paddingTop: '30px'}}>
+                    <Button
+                            onClick={onSubmit}
+                            variant='contained'
+                        >
+                            Save
+                        </Button>
+                    </Grid>
+                </Box>
             </div>
         </React.Fragment>
     )

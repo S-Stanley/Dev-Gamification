@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate, useParams } from 'react-router-dom'
 import ILadder from "../../interfaces/ILadder";
 import Http from "../../http/Http";
+import { Button, Stack, TextField, Container, Typography } from "@mui/material";
 
 function HomePage(){
 
@@ -9,6 +10,7 @@ function HomePage(){
     const [loading, setLoading] = React.useState<boolean>(true);
     const [sortBy, setSortBy] = React.useState<string>('');
     const [filterDate, setFilterDate] = React.useState<string>('ALL/ALL');
+    const [showFilter, setShowFilter] = React.useState<boolean>(false);
     const { repo_id } = useParams();
 
     const navigate = useNavigate();
@@ -48,37 +50,55 @@ function HomePage(){
     }
 
     return (
-        <div>
-            <div>
+        <Container>
+            <Stack spacing={2} direction='row' style={{paddingTop: '30px', paddingBottom: '30px'}} justifyContent='center'>
                 { (sortBy !==  '' && sortBy !== 'merges') && (
-                    <div>
-                        <button onClick={() => setSortBy('merges')}>Sort by merge</button>
-                    </div>
+                        <Button variant='contained' onClick={() => setSortBy('merges')}>Sort by merge</Button>
                 )}
                 { (sortBy !== 'weight') && (
-                    <div>
-                        <button onClick={() => setSortBy('weight')}>Sort by weight</button>
-                    </div>
+                        <Button variant='contained' onClick={() => setSortBy('weight')}>Sort by weight</Button>
                 )}
                 { (sortBy !== 'average_weight') && (
-                    <div>
-                        <button onClick={() => setSortBy('average_weight')}>Sort by average_weight</button>
-                    </div>
+                        <Button variant='contained' onClick={() => setSortBy('average_weight')}>Sort by average_weight</Button>
                 )}
-            </div>
+                { (filterDate === 'ALL/ALL') && (
+                        <Button
+                            variant='contained'
+                            onClick={() => {
+                                if (showFilter && filterDate !== 'ALL/ALL') {
+                                    setFilterDate('ALL/ALL');
+                                    fetch_data();
+                                }
+                                setShowFilter(!showFilter);
+                            }}
+                        >
+                            { showFilter ? 'Reset filter by month' : 'Filter by month' }
+                        </Button>
+                )}
+            </Stack>
             <div>
-                You can also filter by month and year (format MM/YYYY):
-                    <input type="text" value={filterDate} onChange={(e) => setFilterDate(e.target.value)}  />
-                    <button onClick={fetch_data} >Save</button>
-                    <button
-                        onClick={() => {
-                            setFilterDate("ALL/ALL");
-                            fetch_data();
-                        }}
-                    >
-                        Reset
-                    </button>
+                { showFilter &&
+                    <div>
+                        <hr/>
+                        <Stack style={{paddingBottom: '40px', paddingTop: '30px'}} spacing={2} justifyContent='left' direction='row'>
+                            <TextField size='small' type="text" value={filterDate} onChange={(e) => setFilterDate(e.target.value)}  label='format MM/YYYY' />
+                                <Button variant='contained' onClick={fetch_data} >Save</Button>
+                                <Button
+                                    variant='contained'
+                                    onClick={() => {
+                                        setFilterDate("ALL/ALL");
+                                        fetch_data();
+                                    }}
+                                >
+                                    Reset
+                                </Button>
+                        </Stack>
+                    </div>
+                }
             </div>
+            <Typography>
+                {`sorted by: ${sortBy ? sortBy.replace('_', ' ') : 'merges'}`}
+            </Typography>
             <div>
                 <table className="table">
                     <thead>
@@ -109,7 +129,7 @@ function HomePage(){
                     </tbody>
                 </table>
             </div>
-        </div>
+        </Container>
     );
 }
 
