@@ -21,6 +21,17 @@ On MacOS
 brew install docker
 ```
 
+Open docker socket
+```
+open -a docker
+```
+
+## Create the volume for postgres
+
+```bash
+docker volume create purpev_postgres_volume
+```
+
 ## Run all services on local
 
 ```bash
