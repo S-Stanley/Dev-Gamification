@@ -19,3 +19,17 @@ services:
       - 1239:1239
     volumes:
       - ../services/web/:/app
+
+  purpev-postgres:
+    image: postgres:14.4
+    ports:
+      - 5432:5432
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+    volumes:
+      - purpev_postgres_volume:/var/lib/postgresql/data
+
+volumes:
+  purpev_postgres_volume:
+    external: true

@@ -39,3 +39,6 @@ urllib3==1.26.9
 virtualenv==20.14.0
 Werkzeug==2.0.3
 Flask-Cors==3.0.10
+SQLAlchemy==1.4.32
+psycopg2==2.9.3
+python-dotenv==0.20.0

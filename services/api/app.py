@@ -2,6 +2,9 @@ from flask import Flask, request, jsonify, abort
 from flask_cors import CORS
 import os
 from core.utils import gitlab
+from sqlalchemy import create_engine
+from dotenv import load_dotenv
+
 from core.database.functions.project import create_project
 from core.database.functions.merges import create_merge, find_all_merges_by_project_id
 from core.database.functions.data import add_stats
@@ -18,11 +21,30 @@ app = Flask(__name__)
 
 CORS(app)
 
+load_dotenv()
+
+engine = create_engine(f"postgresql://postgres:{os.environ['POSTGRES_PASSWORD']}@docker_purpev-postgres_1:5432", echo=True, future=True)
+
+from sqlalchemy.orm import declarative_base, Session
+from sqlalchemy import Column, Integer
+
+Base = declarative_base()
+class User(Base):
+	__tablename__ = 'user'
+
+	id = Column(Integer, primary_key=True)
+
+with Session(engine) as session:
+	new_user = User(
+		id='hey'
+	)
+	session.add(new_user)
+	session.commit()
+
 app.config['MONGO_URI'] = os.environ['db_link']
 app.register_blueprint(graphs, url_prefix='/graphs')
 app.register_blueprint(users, url_prefix='/users')
 app.register_blueprint(repo, url_prefix='/repo')
-
 
 @app.route('/')
 def welcome():
