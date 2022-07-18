@@ -8,7 +8,10 @@ mongo = MongoClient(os.environ['db_link'])[os.environ['database_name']]
 
 def fetch_repo() -> list:
 	all_repo = mongo.repo.find()
-	return (all_repo)
+	output = []
+	for i in all_repo:
+		output.append(i)
+	return (output)
 
 def fetch_merge_requests_by_project_users(repo, project_id) -> list:
 	output = []
@@ -16,6 +19,7 @@ def fetch_merge_requests_by_project_users(repo, project_id) -> list:
 	page = 0
 	while items_get == 100:
 		page += 1
+		time.sleep(2)
 		url = '{}/api/v4/projects/{}/merge_requests/?access_token={}&per_page=100&page={}&state=merged'.format(repo['uri'], project_id, repo['personal_token'], page)
 		if repo['basic_auth']:
 			req = requests.get(url, headers={
@@ -35,6 +39,7 @@ def get_all_projects_by_users(repo) -> list:
 	project_download = 20
 	output = []
 	while project_download == 20:
+		time.sleep(2)
 		url = '{}/api/v4/projects?membership=true&access_token={}&page={}&per_page={}'.format(repo['uri'], repo['personal_token'], page, per_page)
 		if repo['basic_auth']:
 			req = requests.get(url, headers={
@@ -99,7 +104,10 @@ def get_all_projects_by_user_id(user_id: str):
 	data = mongo.project_user.find({
 		'user_id': user_id
 	})
-	return (data)
+	output = []
+	for i in data:
+		output.append(i)
+	return (output)
 
 def find_issue(issue_id: str):
 	to_find = mongo.issues.find_one({
@@ -169,6 +177,7 @@ def save_issue_related_mr(issues_id, merge_id):
 	})
 
 def fetch_issues_that_close_merge_request(merge, repo, project_id):
+		time.sleep(2)
 		url = '{}/api/v4/projects/{}/merge_requests/{}/closes_issues?membership=true&access_token={}'.format(repo['uri'], project_id, merge['iid'], repo['personal_token'])
 		if repo['basic_auth']:
 			req = requests.get(url, headers={
@@ -202,22 +211,27 @@ def find_all_merges_by_project_id(project_id: str):
 	return (output)
 
 all_repo = fetch_repo()
+print('Running first loop')
+print(f'{len(all_repo)} to Fetch')
 for repo in all_repo:
+	print('Fetching data for repo:', repo["uri"])
 	projects = get_all_projects_by_users(repo)
+	print(f'{len(projects)} to fetch for repo {repo["uri"]}')
 	for project in projects:
 		create_project(project)
 		create_project_user(project['id'], repo['user_id'], str(repo['_id']))
 	all_projects_users = get_all_projects_by_user_id(repo['user_id'])
-	for project_user in all_projects_users:
+	print(f'{len(all_projects_users)} to fetch for repo {repo["uri"]}')
+	for project_user in tqdm(all_projects_users):
 		all_merges = fetch_merge_requests_by_project_users(repo, project_user['project_id'])
 		for merges in all_merges:
 			create_merge(merges)
 
+print('Running second loop')
 all_repo = fetch_repo()
 for repo in all_repo:
 	all_project_users = find_all_project_user_by_repo_id(str(repo['_id']))
-	for project_user in all_project_users:
+	for project_user in tqdm(all_project_users):
 		all_merges = find_all_merges_by_project_id(project_user['project_id'])
 		for merge in tqdm(all_merges):
-			time.sleep(2)
-			fetch_issues_that_close_merge_request(merge, repo, project_user['project_id'])
+				fetch_issues_that_close_merge_request(merge, repo, project_user['project_id'])
