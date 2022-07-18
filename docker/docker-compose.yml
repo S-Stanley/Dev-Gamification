@@ -6,6 +6,8 @@ services:
     build:
       context: ../services/api/
       dockerfile: Dockerfile
+      args:
+        - hello=world
     ports:
       - 1240:1240
     volumes:
